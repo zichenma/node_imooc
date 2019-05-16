@@ -1,15 +1,20 @@
 {
-  "name": "2_3_commonjs",
+  "name": "debugger-test",
   "version": "1.0.0",
   "description": "",
-  "main": "a.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zichenma/node_imooc.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "lodash": "^4.17.11"
-  }
+  "bugs": {
+    "url": "https://github.com/zichenma/node_imooc/issues"
+  },
+  "homepage": "https://github.com/zichenma/node_imooc#readme"
 }
