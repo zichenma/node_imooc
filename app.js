@@ -1,18 +1,22 @@
 const http = require('http')
-const queryString = require('querystring')
+
 
 const server = http.createServer((req, res) => {
-    console.log('method: ', req.method) // GET
-    const url = req.url
-    console.log('url: ', url)
-    req.query = queryString.parse(url.split('?')[1])
-    // http://localhost:8000/api/blog/list?author=zhangsan&keyword=A
-    console.log('query', req.query) //{ author: 'zhangsan', keyword: 'A' }
-    res.end(
-        JSON.stringify(req.query)
-    )
-})
-
+  if (req.method === 'POST') {
+      // 数据格式
+      console.log('content-type', req.headers['content-type'])
+      // 接收数据
+      let postData = ''
+      // chunk 是二进制格式
+      req.on('data', chunk => {
+          postData += chunk.toString()
+      })
+      req.on('end', () => {
+          console.log('postData :', postData)
+          res.end('finished data') // 在这里返回， 因为是异步
+      })
+  }
+});
 
 server.listen(8000, () => {
     console.log('listening on 8000 port')
