@@ -1,21 +1,45 @@
 const http = require('http')
+const querystring = require('querystring')
+
 
 
 const server = http.createServer((req, res) => {
-  if (req.method === 'POST') {
-      // 数据格式
-      console.log('content-type', req.headers['content-type'])
-      // 接收数据
-      let postData = ''
-      // chunk 是二进制格式
-      req.on('data', chunk => {
-          postData += chunk.toString()
-      })
-      req.on('end', () => {
-          console.log('postData :', postData)
-          res.end('finished data') // 在这里返回， 因为是异步
-      })
-  }
+    const method = req.method;
+    const url = req.url;
+    const path = url.split('?')[0];
+    const query = querystring.parse(url.split('?')[1]);
+
+    // 设置返回一个字符串格式为 JSON
+    res.setHeader('Content-type', 'application/json') 
+
+    // 返回的数据
+    const resData = {
+        method,
+        url,
+        path,
+        query
+    }
+
+    // 返回
+    if (method === 'GET') {
+        res.end(
+            JSON.stringify(resData) 
+        )
+    }
+    if (method == 'POST') {
+        let postData ='';
+        req.on('data', chunk => {
+            postData += chunk.toString()
+        })
+        req.on('end', () => {
+            resData.postData = postData;
+            // 返回
+            res.end(
+                JSON.stringify(resData) 
+            )
+            console.log(resData)
+        })
+    }
 });
 
 server.listen(8000, () => {
