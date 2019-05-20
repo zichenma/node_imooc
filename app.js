@@ -2,6 +2,34 @@ const queryString = require('querystring');
 const handleBlogRouter = require ('./src/router/blog');
 const handleUserRouter = require('./src/router/user');
 
+// 用于处理 postdata
+const getPostData = req => {
+    const promise = new Promise((resolve, reject) => {
+        if (req.method !== 'POST') {
+            resolve({});
+            return;
+        }
+        if (req.headers['content-type'] !== 'application/json') {
+            resolve({});
+            return;
+        }
+        let postData = '';
+        req.on('data', chunk => {
+            postData += chunk.toString();
+        })
+        req.on('end', () => {
+            if (!postData) {
+                rersolve({});
+                return;
+            }
+            resolve(
+                JOSN.parse(postData);
+            )
+        })
+    })
+    return promise;
+}
+
 const serverHandle = (req, res) => {
     // 设置返回格式 JSON
     res.setHeader('Content-type', 'application/json')
@@ -12,8 +40,11 @@ const serverHandle = (req, res) => {
 
     // 解析 query
     req.query = queryString.parse(url.split('?')[0]);
-
-    // 处理 blog 路由
+    
+    // 处理 Post data
+    getPostData(req).then(postData => {
+        req.body = postData;
+        // 处理 blog 路由
     const blogData = handleBlogRouter(req, res);
 
     if (blogData) {
@@ -36,6 +67,7 @@ const serverHandle = (req, res) => {
     res.writeHead(404, {'Content-type': 'text/plan'})
     res.write('404 Not Found\n')
     res.end();
+    });
 }
 
 module.exports = serverHandle;
