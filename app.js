@@ -6,14 +6,17 @@ const handleUserRouter = require('./src/router/user');
 const getPostData = req => {
     const promise = new Promise((resolve, reject) => {
         if (req.method !== 'POST') {
+         
             resolve({});
             return;
         }
+        console.log(req.headers['content-type']);
         if (req.headers['content-type'] !== 'application/json') {
             resolve({});
             return;
         }
         let postData = '';
+   
         req.on('data', chunk => {
             postData += chunk.toString();
         })
@@ -23,9 +26,10 @@ const getPostData = req => {
                 return;
             }
             resolve(
-                JOSN.parse(postData);
+                JSON.parse(postData)
             )
         })
+    
     })
     return promise;
 }
@@ -39,7 +43,7 @@ const serverHandle = (req, res) => {
     req.path = url.split('?')[0];
 
     // 解析 query
-    req.query = queryString.parse(url.split('?')[0]);
+    req.query = queryString.parse(url.split('?')[1]);
     
     // 处理 Post data
     getPostData(req).then(postData => {
