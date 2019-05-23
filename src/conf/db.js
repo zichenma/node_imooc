@@ -1,5 +1,4 @@
 const env = process.env.NODE_ENV; // 环境参数
-console.log(env);
 
 // 配置
 let MYSQL_CONF;
@@ -14,7 +13,7 @@ if (env === 'dev') {
     }
 }
 
-if (evn === 'production') {
+if (env === 'production') {
     MYSQL_CONF = {
         host: 'localhost',
         user: 'root',

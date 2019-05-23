@@ -6,11 +6,9 @@ const handleUserRouter = require('./src/router/user');
 const getPostData = req => {
     const promise = new Promise((resolve, reject) => {
         if (req.method !== 'POST') {
-         
             resolve({});
             return;
         }
-        console.log(req.headers['content-type']);
         if (req.headers['content-type'] !== 'application/json') {
             resolve({});
             return;
@@ -48,15 +46,28 @@ const serverHandle = (req, res) => {
     // 处理 Post data
     getPostData(req).then(postData => {
         req.body = postData;
-        // 处理 blog 路由
-    const blogData = handleBlogRouter(req, res);
+    // 处理 blog 路由:
 
-    if (blogData) {
-        res.end(
-            JSON.stringify(blogData)
-        )
-        return;
+    // 仅适用于假数据
+    // const blogData = handleBlogRouter(req, res);
+    // if (blogData) {
+    //     res.end(
+    //         JSON.stringify(blogData)
+    //     )
+    //     return;
+    // }
+
+    const blogResult = handleBlogRouter(req, res);
+    
+    if (blogResult) {
+        blogResult.then(blogData => {
+            res.end(
+               JSON.stringify(blogData)
+           )
+       });
+       return;
     }
+
     // 处理 User 路由
     const userData = handleUserRouter(req, res);
 
