@@ -59,18 +59,29 @@ const updateBlog = (id, blogData = {}) => {
     // id 就是要更新博客的 id
     // blogData 是一个博客对象， 包含 title content 属性
     // console.log('update blog', id, blogData);
-    return true;
-    // return false;
-    // errorModel:
-    // {
-    //     "message": "Updates blog failed",
-    //     "errno": -1
-    // }
+    const { title, content } = blogData;
+    const sql = `
+        update blogs set title='${title}', content='${content}' where id=${id}
+    `
+    return exec(sql).then(updateData => {
+        // console.log('updateData is ', updateData);
+        if (updateData.affectedRows > 0) {
+            return true;
+        }
+        return false;
+    });
 }
 
-const delBlog = (id) => {
+const delBlog = (id, author) => {
     // id 就是要删除博客的 id
-    return true;
+    // 实际工作中考虑软删除
+    const sql = `delete from blogs where id='${id}' and author='${author}';`
+    return exec(sql).then(delData => {
+        if (delData.affectedRows > 0) {
+            return true;
+        }
+        return false;
+    });
 }
 
 module.exports = {

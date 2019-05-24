@@ -20,7 +20,7 @@ const getPostData = req => {
         })
         req.on('end', () => {
             if (!postData) {
-                rersolve({});
+                resolve({});
                 return;
             }
             resolve(

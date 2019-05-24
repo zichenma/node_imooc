@@ -54,21 +54,28 @@ const handleBlogRouter = (req, res) => {
     // 跟新博客
     if (method === 'POST' && req.path === '/api/blog/update') {
         const result = updateBlog(id, req.body);
-        if (result) {
-            return new SuccessModel();
-        } else {
-            return new ErrorModel('Updates blog failed');
-        }
+        return result.then(val => {
+            if (val) {
+                return new SuccessModel();
+            } else {
+                return new ErrorModel('Updates blog failed');
+            }
+        })
     }
 
     // 删除博客
     if (method === 'POST' && req.path === '/api/blog/del') {
-        const result = delBlog(id);
-        if (result) {
-            return new SuccessModel();
-        } else {
-            return new ErrorModel('Delete blog failed');
-        }
+        // 防止用一个ID就能删除别人的博客，所以需要作者
+        const author = 'zhangsan'; // 假数据，待开发登陆时再改成真数据
+
+        const result = delBlog(id, author);
+        return result.then(value => {
+            if (value) {
+                return new SuccessModel();
+            } else {
+                return new ErrorModel('Delete blog failed');
+            }
+        })
     }  
 }
 
