@@ -14,7 +14,8 @@ const handleUserRouter = (req, res) => {
                 // 操作 cookie 
                 // path 必须设置成根目录，否则默认的path为path=/api/user/login
                 // 如果与默认path不一致，cookie就会失效, 因此必须保证所有的网页验证登陆都有效
-                res.setHeader('Set-Cookie', `username=${data.username}; path=/`);
+                // httpOnly 禁止前端跟改cookie, 添加后前端document.cookie不会显示cookied,且不能修改
+                res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly`);
                 // response header will show: 
                 // Set-Cookie: username=zhangsan; path=/
                 // 前端 console.log 会显示：

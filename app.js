@@ -51,8 +51,10 @@ const serverHandle = (req, res) => {
             return;
         }
         const arr = item.split('=');
-        const key = arr[0];
-        const val = arr[1];
+        // 因为会自动生成一个空格，所以这里必须trim掉， 否则key将会重复
+        // e.g. 'username', ' username'
+        const key = arr[0].trim();
+        const val = arr[1].trim();
         req.cookie[key] = val;
     })
     console.log('req.cookie is', req.cookie);
