@@ -6,10 +6,12 @@ const { set } = require('../db/redis');
 const handleUserRouter = (req, res) => {
     const method = req.method; // GET POST
     // 登陆
-    if (method === 'GET' && req.path === '/api/user/login') {
-        const { username, password } = req.query;
-        // req.body是POST的数据
-      //  const { username, password } = req.body;
+    if (method === 'POST' && req.path === '/api/user/login') {
+        const { username, password } = req.body;
+         // 用GET测试的时候用req.query
+        //  const { username, password } = req.query;
+       // req.body是POST的数据
+      // const { username, password } = req.body;
        const result = login(username, password);
        return result.then(data => {
            if (data.username) {
@@ -26,14 +28,14 @@ const handleUserRouter = (req, res) => {
     }
 
     // 登陆验证的测试
-    if (method === 'GET' && req.path === '/api/user/login-test') {
-        if (req.session.username) {
-            return Promise.resolve(new SuccessModel({
-                session: req.session
-            }));
-        }
-        return Promise.resolve(new ErrorModel('Not login yet'));
-    }
+    // if (method === 'GET' && req.path === '/api/user/login-test') {
+    //     if (req.session.username) {
+    //         return Promise.resolve(new SuccessModel({
+    //             session: req.session
+    //         }));
+    //     }
+    //     return Promise.resolve(new ErrorModel('Not login yet'));
+    // }
 }
 
 module.exports = handleUserRouter;

@@ -8,6 +8,13 @@ const {
 
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 
+// 统一的登陆验证函数：
+const loginCheck = (req => {
+    if (!req.session.username) {
+        return Promise.resolve(new ErrorModel('Not login yet'));
+    }
+})
+
 const handleBlogRouter = (req, res) => {
     const method = req.method; // GET POST
     const id = req.query.id;
@@ -42,8 +49,14 @@ const handleBlogRouter = (req, res) => {
         // const data = newBlog(req.body);
         // return new SuccessModel(data);
 
-        // 因为还没有登陆，暂时用假数据
-        const author = 'zhangsan';
+        const loginCheckResult = loginCheck(req);
+        // 有值就说明未登陆
+        if (loginCheckResult) {
+            // 未登陆
+            return loginCheck;
+        }
+
+        const author = req.session.username;
         req.body.author = author;
         const result = newBlog(req.body);
         return result.then(data => {
@@ -53,6 +66,10 @@ const handleBlogRouter = (req, res) => {
 
     // 跟新博客
     if (method === 'POST' && req.path === '/api/blog/update') {
+        const loginCheckResult = loginCheck(req);
+        if (loginCheckResult) {
+            return loginCheck;
+        }
         const result = updateBlog(id, req.body);
         return result.then(val => {
             if (val) {
@@ -65,9 +82,12 @@ const handleBlogRouter = (req, res) => {
 
     // 删除博客
     if (method === 'POST' && req.path === '/api/blog/del') {
+        const loginCheckResult = loginCheck(req);
+        if (loginCheckResult) {
+            return loginCheck;
+        }
         // 防止用一个ID就能删除别人的博客，所以需要作者
-        const author = 'zhangsan'; // 假数据，待开发登陆时再改成真数据
-
+        const author = req.session.username; 
         const result = delBlog(id, author);
         return result.then(value => {
             if (value) {
