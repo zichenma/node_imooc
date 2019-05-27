@@ -9,7 +9,6 @@ const SESSION_DATA = {};
 const getCookieExpires = () => {
     const d = new Date();
     d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
-    console.log('GMT', d.toGMTString());
     return d.toGMTString();
 }
 
@@ -78,8 +77,6 @@ const serverHandle = (req, res) => {
             // 初始化session
             SESSION_DATA[userId] = {};
         } 
-        // 有session
-        req.session = SESSION_DATA[userId];
     } else {
         needSetCookie = true;
         // 初始化userId

@@ -16,8 +16,6 @@ const handleUserRouter = (req, res) => {
                 // 设置 session 
                 req.session.username = data.username;
                 req.session.realname = data.realname;
-
-                console.log('req.session', req.session);
                 return new SuccessModel();
            }
            return new ErrorModel('Login Failed');
