@@ -1,9 +1,10 @@
 const queryString = require('querystring');
 const handleBlogRouter = require ('./src/router/blog');
 const handleUserRouter = require('./src/router/user');
+const { get, set } = require('./src/db/redis');
 
 // session 数据
-const SESSION_DATA = {};
+// const SESSION_DATA = {};
 
 // 设置一天的过期时间
 const getCookieExpires = () => {
@@ -69,26 +70,50 @@ const serverHandle = (req, res) => {
     })
 
     // 解析 session
+    // let userId = req.cookie.userid;
+    // let needSetCookie = false;
+    // if (userId) {
+    //     // 没有session
+    //     if (!SESSION_DATA[userId]) {
+    //         // 初始化session
+    //         SESSION_DATA[userId] = {};
+    //     } 
+    // } else {
+    //     needSetCookie = true;
+    //     // 初始化userId
+    //     userId = `${Date.now()}_${Math.random()}`;
+    //     // 初始化session
+    //     SESSION_DATA[userId] = {};
+    // }
+    // req.session = SESSION_DATA[userId];
+
+    // 解析 session (使用 redis)
     let userId = req.cookie.userid;
     let needSetCookie = false;
-    if (userId) {
-        // 没有session
-        if (!SESSION_DATA[userId]) {
-            // 初始化session
-            SESSION_DATA[userId] = {};
-        } 
-    } else {
+
+    if (!userId) {
         needSetCookie = true;
-        // 初始化userId
         userId = `${Date.now()}_${Math.random()}`;
-        // 初始化session
-        SESSION_DATA[userId] = {};
-    }
-    req.session = SESSION_DATA[userId];
+        // 初始化 redis 中的 session 值
+        set(userId, {});
+    } 
+    // 获取session
+    req.sessionId = userId;
+    get(req.sessionId).then(sessionData => {
+        if (sessionData === null) {
+            // 初始化 redis 中的 session 值
+            set(req.sessionId, {});
+            // 设置 session
+            req.session = {};
+        } else {
+            // 设置 session
+            req.session = sessionData;
+        }
+        console.log('req.session ', req.session);
 
-
-    // 处理 Post data
-    getPostData(req).then(postData => {
+        // 处理 post data
+        return getPostData(req);
+    }).then(postData => {
         req.body = postData;
     // 处理 blog 路由:
 
