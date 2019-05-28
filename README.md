@@ -1,6 +1,6 @@
 # Start:
 npm run dev
-
+# Redis start:
 # Redis Installation:
 Windows: http://www.runoob.com/redis/redis-install.html
 Mac: brew install redis
@@ -17,3 +17,4 @@ get myKey
 keys * 
 # Delete key:
 del myKey
+# Redis end
