@@ -21,14 +21,27 @@ const handleBlogRouter = (req, res) => {
 
     // 获取博客列表
     if (method === 'GET' && req.path === '/api/blog/list') {
-        const author = req.query.author || '';
+        let author = req.query.author || '';
         const keyword = req.query.keyword || '';
         // 仅仅适用于mock data
         // const listData = getList(author, keyword);
         // return new SuccessModel(listData);
-        
+        if (req.query.isadmin) {
+            //管理员界面
+            const loginCheckResult = loginCheck(req);
+            if (loginCheckResult) {
+                // 未登陆
+                return loginCheckResult;
+            }
+            auhtor.req.session.username;
+        }
+
         // result 是一个从数据库拿到的promise对象
         const result = getList(author, keyword);
+        return result.then(listData => {
+            return new SuccessModel(listData);
+        })
+    
         return result.then(listData => {
             return new SuccessModel(listData);
         })
@@ -53,7 +66,7 @@ const handleBlogRouter = (req, res) => {
         // 有值就说明未登陆
         if (loginCheckResult) {
             // 未登陆
-            return loginCheck;
+            return loginCheckResult;
         }
 
         const author = req.session.username;
@@ -68,7 +81,7 @@ const handleBlogRouter = (req, res) => {
     if (method === 'POST' && req.path === '/api/blog/update') {
         const loginCheckResult = loginCheck(req);
         if (loginCheckResult) {
-            return loginCheck;
+            return loginCheckResult;
         }
         const result = updateBlog(id, req.body);
         return result.then(val => {
@@ -84,7 +97,7 @@ const handleBlogRouter = (req, res) => {
     if (method === 'POST' && req.path === '/api/blog/del') {
         const loginCheckResult = loginCheck(req);
         if (loginCheckResult) {
-            return loginCheck;
+            return loginCheckResult;
         }
         // 防止用一个ID就能删除别人的博客，所以需要作者
         const author = req.session.username; 
