@@ -18,3 +18,13 @@ keys *
 # Delete key:
 del myKey
 # Redis end
+# Nginx start:
+Windows: C:\nginx\conf\nginx.conf
+Mac: /usr/local/nginx/nginx.conf
+start: 
+1. go to nginx.exe folder in cli
+2. nginx.exe
+test: 
+1. go to nginx.exe folder in cli
+2. nginx.exe -t
+
