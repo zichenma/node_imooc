@@ -35,24 +35,24 @@ const getDetail = id => {
 }
 
 const newBlog = (blogData = {}) => {
-    // blogData 是一个博客对象， 包含 title, content, author 属性
-    const { title, content, author }  = blogData;
-    const createTime = Date.now();
+    // blogData 是一个博客对象，包含 title content author 属性
+    const title = blogData.title
+    // console.log('title is', title)
+    const content = blogData.content
+    const author = blogData.author
+    const createTime = Date.now()
 
     const sql = `
         insert into blogs (title, content, createtime, author)
         values ('${title}', '${content}', ${createTime}, '${author}');
     `
+
     return exec(sql).then(insertData => {
-        // console.log('insertData', insertData);
+        // console.log('insertData is ', insertData)
         return {
-            id : insertData.insertId
+            id: insertData.insertId
         }
     })
-
-    // return {
-       //  id : 3 // 表示新建博客，插入到数据表里面的 id
-    // }
 }
 
 const updateBlog = (id, blogData = {}) => {

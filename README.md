@@ -27,4 +27,7 @@ start:
 test: 
 1. go to nginx.exe folder in cli
 2. nginx.exe -t
+# Log: 
+# Only for Linux
+sh copy.sh
 

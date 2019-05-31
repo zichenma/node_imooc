@@ -12,7 +12,7 @@ function createWriteStream(fileName) {
     const fullFileName = path.join(__dirname, '../', '../', 'logs', fileName);
     const writeSteam = fs.createWriteStream(fullFileName, {
         // a 是 append
-        flag: 'a'
+        flags: 'a'
     });
     return writeSteam;
 }
