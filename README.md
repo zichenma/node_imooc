@@ -6,6 +6,8 @@ Windows: http://www.runoob.com/redis/redis-install.html
 Mac: brew install redis
 # NPM:
 npm install redis --save
+# When using Express:
+npm i redis connect-redis --save
 # Start redis server: 
 redis-server
 # Connect redis client locally: 
