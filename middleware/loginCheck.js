@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
         next();
         return;
     }
-    res.json({
+    res.json(
         new ErrorModel('Not Login Yet')
-    })
+    )
 }
