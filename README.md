@@ -32,4 +32,9 @@ test:
 # Log: 
 # Only for Linux
 sh copy.sh
-
+#pm2:
+#installation:
+npm install pm2 -g
+pm2 --version
+#check 
+pm2 list
