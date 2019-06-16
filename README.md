@@ -36,5 +36,19 @@ sh copy.sh
 #installation:
 npm install pm2 -g
 pm2 --version
-#check 
+#Command:
+#Check:
 pm2 list
+#Start:
+pm2 start ... ,
+#Restart:
+pm2 restart <AppName>/<id>
+#Stop/Delete:
+pm2 stop <AppName>/<id>, pm2 delete <AppName>/<id>
+#Info:
+pm2 info <AppName>/<id>
+#Log:
+pm2 log <AppName>/<id>
+# Monit:
+pm2 monit <AppName>/<id>
+
